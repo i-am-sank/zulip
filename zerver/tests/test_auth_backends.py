@@ -5125,7 +5125,7 @@ class TestLDAP(ZulipLDAPTestCase):
     def test_login_success_with_different_subdomain(self) -> None:
         ldap_user_attr_map = {"full_name": "cn"}
 
-        Realm.objects.create(string_id="acme")
+        do_create_realm(string_id="acme", name="acme")
         with self.settings(
             LDAP_APPEND_DOMAIN="zulip.com", AUTH_LDAP_USER_ATTR_MAP=ldap_user_attr_map
         ):
@@ -5348,7 +5348,7 @@ class TestZulipLDAPUserPopulator(ZulipLDAPTestCase):
         )
 
     def test_user_in_multiple_realms(self) -> None:
-        test_realm = do_create_realm("test", "test", False)
+        test_realm = do_create_realm("test", "test", emails_restricted_to_domains=False)
         hamlet = self.example_user("hamlet")
         email = hamlet.delivery_email
         hamlet2 = do_create_user(email, None, test_realm, hamlet.full_name, acting_user=None)
